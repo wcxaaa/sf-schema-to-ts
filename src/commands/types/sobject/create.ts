@@ -1,15 +1,20 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { fs, Messages } from '@salesforce/core';
+import { Messages } from '@salesforce/core';
 import { lowerFirst, upperFirst } from '@salesforce/kit';
 import { AnyJson } from '@salesforce/ts-types';
 import { join } from 'path';
+import { readdir, writeFile } from "fs";
+import { promisify } from "util";
+
+const readDirAsync = promisify(readdir);
+const writeFileAsync = promisify(writeFile);
 
 // Initialize Messages with the current plugin directory
 Messages.importMessagesDirectory(__dirname);
 
 // Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
 // or any library that is using the messages framework can also be loaded this way.
-const messages = Messages.loadMessages('salesforce-to-types', 'sobject');
+const messages = Messages.loadMessages('sf-schema-to-ts', 'sobject');
 
 const header = `
 /**
@@ -36,7 +41,7 @@ export type ObjectClassInfo = {
   className: string
 };
 
-export default class Org extends SfdxCommand {
+export default class SObjectCreate extends SfdxCommand {
 
   public static description = messages.getMessage('commandDescription');
 
@@ -68,27 +73,31 @@ export default class Org extends SfdxCommand {
     await this.createBaseSObjectType();
     await this.generateSObjectType();
 
-    if (this.createdFiles.length > 0) {
-      this.ux.styledHeader('Create types');
-      this.ux.table(this.createdFiles, {
-        columns: [
-          {key: 'filePath', label: 'Output file path'},
-          {key: 'className', label: 'Class name'}
-        ]
-      });
-    } else {
-      this.ux.log('No types created.');
-    }
+    // TODO: Make it work with latest oclif
+
+    // if (this.createdFiles.length > 0) {
+    //   this.ux.styledHeader('Create types');
+    //   this.ux.table(this.createdFiles, 
+    //     [
+    //       {key: 'filePath', label: 'Output file path'},
+    //       {key: 'className', label: 'Class name'}
+    //     ]
+    //   );
+    // } else {
+    //   this.ux.log('No types created.');
+    // }
+
+    this.ux.log('ran');
 
     // Return an object to be displayed with --json
     return { files: this.createdFiles };
   }
 
   private async createBaseSObjectType() {
-    const dir = await fs.readdir(this.flags.outputdir);
+    const dir = await readDirAsync(this.flags.outputdir);
     if (!dir.find(fileName => fileName === 'sobject.ts')) {
       const filePath = join(this.flags.outputdir, 'sobject.ts');
-      await fs.writeFile(filePath, sobject);
+      await writeFileAsync(filePath, sobject);
       this.createdFiles.push({ filePath, className: 'SObject'});
     }
   }
@@ -128,7 +137,7 @@ export default class Org extends SfdxCommand {
     typeContents += '\n}\n';
 
     const filePath = join(this.flags.outputdir, `${lowerFirst(pascalObjectName)}.ts`);
-    await fs.writeFile(filePath, typeContents);
+    await writeFileAsync(filePath, typeContents);
     this.createdFiles.push({ filePath, className: pascalObjectName });
   }
 }

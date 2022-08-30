@@ -1,57 +1,20 @@
-salesforce-to-types
-=================
+sf-schema-to-ts
+===============
 
-[![Version](https://img.shields.io/npm/v/salesforce-to-types.svg)](https://npmjs.org/package/salesforce-to-types)
-[![CI](https://github.com/amphro/salesforce-to-types/workflows/CI/badge.svg)](https://github.com/amphro/salesforce-to-types/actions?query=workflow%3ACI)
-[![Codecov](https://codecov.io/gh/amphro/salesforce-to-types/branch/master/graph/badge.svg)](https://codecov.io/gh/amphro/salesforce-to-types)
-[![Downloads/week](https://img.shields.io/npm/dw/salesforce-to-types.svg)](https://npmjs.org/package/salesforce-to-types)
-[![License](https://img.shields.io/npm/l/salesforce-to-types.svg)](https://github.com/amphro/salesforce-to-types/blob/master/package.json)
+sf-schema-to-ts
 
-A Salesforce CLI plugin to generate typescript types for different Salesforce resources, like sobjects, using the APIs.
+[![Version](https://img.shields.io/npm/v/sf-schema-to-ts.svg)](https://npmjs.org/package/sf-schema-to-ts)
+[![CircleCI](https://circleci.com/gh/wcxaaa/sf-schema-to-ts/tree/master.svg?style=shield)](https://circleci.com/gh/wcxaaa/sf-schema-to-ts/tree/master)
+[![Appveyor CI](https://ci.appveyor.com/api/projects/status/github/wcxaaa/sf-schema-to-ts?branch=master&svg=true)](https://ci.appveyor.com/project/heroku/sf-schema-to-ts/branch/master)
+[![Greenkeeper](https://badges.greenkeeper.io/wcxaaa/sf-schema-to-ts.svg)](https://greenkeeper.io/)
+[![Known Vulnerabilities](https://snyk.io/test/github/wcxaaa/sf-schema-to-ts/badge.svg)](https://snyk.io/test/github/wcxaaa/sf-schema-to-ts)
+[![Downloads/week](https://img.shields.io/npm/dw/sf-schema-to-ts.svg)](https://npmjs.org/package/sf-schema-to-ts)
+[![License](https://img.shields.io/npm/l/sf-schema-to-ts.svg)](https://github.com/wcxaaa/sf-schema-to-ts/blob/master/package.json)
 
-```sh-session
-$ sfdx plugins:install salesforce-to-types
-$ sfdx types:sobject:create -s Account
-...
-```
-
+<!-- toc -->
+<!-- install -->
+<!-- usage -->
 <!-- commands -->
-* [`sfdx types:sobject:create -s <string> [-o <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`](#sfdx-typessobjectcreate--s-string--o-directory--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfataltracedebuginfowarnerrorfatal)
-
-## `sfdx types:sobject:create -s <string> [-o <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]`
-
-Generates a typescript type for a Salesforce sobject!
-
-```
-USAGE
-  $ sfdx types:sobject:create -s <string> [-o <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
-  trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
-
-OPTIONS
-  -o, --outputdir=outputdir                                                         [default: ./src/types] the output
-                                                                                    directory to put the generated types
-
-  -s, --sobject=sobject                                                             (required) the sobject to describe
-                                                                                    and generate a type for
-
-  -u, --targetusername=targetusername                                               username or alias for the target
-                                                                                    org; overrides default target org
-
-  --apiversion=apiversion                                                           override the api version used for
-                                                                                    api requests made by this command
-
-  --json                                                                            format output as json
-
-  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
-                                                                                    this command invocation
-
-EXAMPLES
-  $ sfdx types:sobject:create --sobject Account
-  $ sfdx types:sobject:create --sobject MyCustomObject__c --directory types/ --targetusername myOrg@example.com
-```
-
-_See code: [src/commands/types/sobject/create.ts](https://github.com/amphro/salesforce-to-types/blob/v0.1.0/src/commands/types/sobject/create.ts)_
-<!-- commandsstop -->
 <!-- debugging-your-plugin -->
 # Debugging your plugin
 We recommend using the Visual Studio Code (VS Code) IDE for your plugin development. Included in the `.vscode` directory of this plugin is a `launch.json` config file, which allows you to attach a debugger to the node process when running your commands.
