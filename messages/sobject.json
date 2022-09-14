@@ -1,5 +1,5 @@
 {
-  "commandDescription": "Generates a typescript type for a Salesforce sobject!",
-  "sobjectFlagDescription": "the sobject to describe and generate a type for",
-  "directoryFlagDescription": "the output directory to put the generated types"
+  "commandDescription": "Generates a TypeScript type for a Salesforce sobject!",
+  "sobjectFlagDescription": "The sObject API name to generate interface from",
+  "directoryFlagDescription": "The folder where the interface file is generated"
 }

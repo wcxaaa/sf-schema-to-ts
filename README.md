@@ -1,35 +1,68 @@
 sf-schema-to-ts
 ===============
 
-sf-schema-to-ts
-
-[![Version](https://img.shields.io/npm/v/sf-schema-to-ts.svg)](https://npmjs.org/package/sf-schema-to-ts)
-[![CircleCI](https://circleci.com/gh/wcxaaa/sf-schema-to-ts/tree/master.svg?style=shield)](https://circleci.com/gh/wcxaaa/sf-schema-to-ts/tree/master)
-[![Appveyor CI](https://ci.appveyor.com/api/projects/status/github/wcxaaa/sf-schema-to-ts?branch=master&svg=true)](https://ci.appveyor.com/project/heroku/sf-schema-to-ts/branch/master)
-[![Greenkeeper](https://badges.greenkeeper.io/wcxaaa/sf-schema-to-ts.svg)](https://greenkeeper.io/)
-[![Known Vulnerabilities](https://snyk.io/test/github/wcxaaa/sf-schema-to-ts/badge.svg)](https://snyk.io/test/github/wcxaaa/sf-schema-to-ts)
-[![Downloads/week](https://img.shields.io/npm/dw/sf-schema-to-ts.svg)](https://npmjs.org/package/sf-schema-to-ts)
-[![License](https://img.shields.io/npm/l/sf-schema-to-ts.svg)](https://github.com/wcxaaa/sf-schema-to-ts/blob/master/package.json)
+A tool to generate TypeScript interfaces for LWC, according to the defined sObject schema.
 
 <!-- toc -->
 <!-- install -->
+
+## Install
+Execute following commands in order.
+
+``` shell
+yarn install
+yarn build
+sfdx plugins:link .
+```
 <!-- usage -->
+
+## Usage
+
+Run this tool at the main Salesforce project.
+
+```
+USAGE
+  $ sfdx types:sobject:create -s <string> [-o <directory>] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
+
+FLAGS
+  -o, --outputdir=<value>                                                           [default: .] The folder where the interface file is generated
+  -s, --sobject=<value>                                                             (required) The sObject API name to generate interface from
+  -u, --targetusername=<value>                                                      username or alias for the target org; overrides default target org
+  --apiversion=<value>                                                              override the api version used for api requests made by this command
+  --json                                                                            format output as json
+  --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for this command invocation
+```
+
 <!-- commands -->
+## Example
+
+Generate IContact interface file to a path.
+
+``` shell
+sfdx types:sobject:create -o ./src/types/ -s Contact
+```
+
+Generate ILog (custom Object) interface file to a path.
+
+``` shell
+sfdx types:sobject:create -o ./src/types/ -s Log__c
+```
+
 <!-- debugging-your-plugin -->
-# Debugging your plugin
+## Debugging your plugin
 We recommend using the Visual Studio Code (VS Code) IDE for your plugin development. Included in the `.vscode` directory of this plugin is a `launch.json` config file, which allows you to attach a debugger to the node process when running your commands.
 
-To debug the `hello:org` command: 
+To debug the `types:sobject:create` command: 
 1. Start the inspector
   
 If you linked your plugin to the sfdx cli, call your command with the `dev-suspend` switch: 
 ```sh-session
-$ sfdx hello:org -u myOrg@example.com --dev-suspend
+$ sfdx types:sobject:create -u myOrg@example.com --dev-suspend
 ```
   
 Alternatively, to call your command using the `bin/run` script, set the `NODE_OPTIONS` environment variable to `--inspect-brk` when starting the debugger:
 ```sh-session
-$ NODE_OPTIONS=--inspect-brk bin/run hello:org -u myOrg@example.com
+$ NODE_OPTIONS=--inspect-brk bin/run types:sobject:create -u myOrg@example.com
 ```
 
 2. Set some breakpoints in your command code
