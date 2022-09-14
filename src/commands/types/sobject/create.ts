@@ -1,11 +1,11 @@
-import { flags, SfdxCommand } from '@salesforce/command';
-import { Messages } from '@salesforce/core';
-import { lowerFirst, upperFirst } from '@salesforce/kit';
-import { AnyJson } from '@salesforce/ts-types';
-import { join } from 'path';
+import { flags, SfdxCommand } from "@salesforce/command";
+import { Messages } from "@salesforce/core";
+import { lowerFirst, upperFirst } from "@salesforce/kit";
+import { AnyJson } from "@salesforce/ts-types";
+import { join } from "path";
 import { writeFile } from "fs";
 import { promisify } from "util";
-import { fieldMappings } from '../../../fieldMappings';
+import { fieldMappings } from "../../../fieldMappings";
 
 const writeFileAsync = promisify(writeFile);
 
@@ -14,7 +14,7 @@ Messages.importMessagesDirectory(__dirname);
 
 // Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
 // or any library that is using the messages framework can also be loaded this way.
-const messages = Messages.loadMessages('sf-schema-to-ts', 'sobject');
+const messages = Messages.loadMessages("sf-schema-to-ts", "sobject");
 
 const header = `
 /**
@@ -24,28 +24,28 @@ const header = `
 
 export type ObjectClassInfo = {
   filePath: string,
-  className: string
+  interfaceName: string
 };
 
 export default class SObjectCreate extends SfdxCommand {
 
-  public static description = messages.getMessage('commandDescription');
+  public static description = messages.getMessage("commandDescription");
 
   public static examples = [
-    '$ sfdx types:sobject:create --sobject Account',
-    '$ sfdx types:sobject:create --sobject MyCustomObject__c --directory types/ --targetusername myOrg@example.com'
+    "$ sfdx types:sobject:create --sobject Account",
+    "$ sfdx types:sobject:create --sobject MyCustomObject__c --directory types/ --targetusername myOrg@example.com"
   ];
 
   protected static flagsConfig = {
     // flag with a value (-n, --name=VALUE)
     outputdir: flags.directory({
-      char: 'o',
-      description: messages.getMessage('directoryFlagDescription'),
-      default: '.'
+      char: "o",
+      description: messages.getMessage("directoryFlagDescription"),
+      default: "."
     }),
     sobject: flags.string({
-      char: 's',
-      description: messages.getMessage('sobjectFlagDescription'),
+      char: "s",
+      description: messages.getMessage("sobjectFlagDescription"),
       required: true
     })
   };
@@ -58,21 +58,21 @@ export default class SObjectCreate extends SfdxCommand {
   public async run(): Promise<AnyJson> {
     await this.generateSObjectType();
 
-    // TODO: Make it work with latest oclif
-
-    // if (this.createdFiles.length > 0) {
-    //   this.ux.styledHeader('Create types');
-    //   this.ux.table(this.createdFiles, 
-    //     [
-    //       {key: 'filePath', label: 'Output file path'},
-    //       {key: 'className', label: 'Class name'}
-    //     ]
-    //   );
-    // } else {
-    //   this.ux.log('No types created.');
-    // }
-
-    this.ux.log('ran');
+    if (this.createdFiles.length > 0) {
+      this.ux.styledHeader("Create types");
+      this.ux.table(this.createdFiles, 
+        {
+          filePath: {
+            header: "Output File"
+          },
+          interfaceName: {
+            header: "Interface"
+          }
+        }
+      );
+    } else {
+      this.ux.log("No types created.");
+    }
 
     // Return an object to be displayed with --json
     return { files: this.createdFiles };
@@ -101,7 +101,7 @@ export default class SObjectCreate extends SfdxCommand {
         typeName = "string";
       }
   
-      typeContents += `\n  ${field['name']}: ${typeName};`;
+      typeContents += `\n  ${field["name"]}: ${typeName};`;
     }
 
     typeContents += `\n`;
@@ -116,11 +116,11 @@ export default class SObjectCreate extends SfdxCommand {
     }
 
     // End
-    typeContents += '\n}\n';
+    typeContents += "\n}\n";
 
     const filePath = join(this.flags.outputdir, `${lowerFirst(pascalObjectName)}.interface.ts`);
     await writeFileAsync(filePath, typeContents);
-    this.createdFiles.push({ filePath, className: interfaceName });
+    this.createdFiles.push({ filePath, interfaceName });
   }
 
   private convertToPascalName = (inputName: string): string => {
@@ -128,9 +128,9 @@ export default class SObjectCreate extends SfdxCommand {
       // Capitalize all words
       .replace(/[a-zA-Z0-9-]+_/g, upperFirst)
       // Remove end
-      .replace(/__c$/, '')
+      .replace(/__c$/, "")
       // Replace all underscores
-      .replace(/_/g, '');
+      .replace(/_/g, "");
   }
 
 }
